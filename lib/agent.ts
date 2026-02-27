@@ -130,6 +130,7 @@ export async function runAgent(userId: string) {
             category: analysis.category,
             needsReply: analysis.needsReply,
             draftReply: analysis.draftReply,
+            actionItems: analysis.actionItems,
             calendarEvents: analysis.calendarEvents,
             tasksCreated: emailTasksCreated,
             draftCreated: draftCreated,
@@ -161,6 +162,13 @@ export async function runAgent(userId: string) {
           status: entry.status as "success" | "error",
           summary: entry.summary,
           priority: entry.priority,
+          category: entry.category,
+          needsReply: entry.needsReply,
+          draftReply: entry.draftReply,
+          actionItems: entry.actionItems,
+          tasksCreated: entry.tasksCreated,
+          draftCreated: entry.draftCreated,
+          eventsCreated: entry.eventsCreated,
         });
         if (entry.status === "success") {
           totalTasksCreated += entry.tasksCreated ?? 0;
