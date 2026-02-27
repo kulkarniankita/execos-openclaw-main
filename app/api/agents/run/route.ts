@@ -38,10 +38,10 @@ export async function POST(request: NextRequest) {
   //cron job
   const results = [];
   const eligibleUsers = await getUsersWithAgentEnabled();
-  for (const user of eligibleUsers) {
-    const result = await runAgent(user.id);
+  for (const { userId } of eligibleUsers) {
+    const result = await runAgent(userId);
     results.push({
-      userId: user.id,
+      userId: userId,
       status: result.status,
       summary: result.summary,
     });

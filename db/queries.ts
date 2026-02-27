@@ -170,9 +170,11 @@ export async function getAgentRuns(userId: string) {
 }
 
 export async function getUsersWithAgentEnabled() {
-  const results = await db
-    .select()
+  return db
+    .select({ userId: users.id, clerkId: users.clerkId })
     .from(users)
-    .where(eq(users.agentEnabled, true));
-  return results ?? [];
+    .innerJoin(integrations, eq(users.id, integrations.userId))
+    .where(
+      and(eq(users.agentEnabled, true), eq(integrations.provider, "gmail")),
+    );
 }
