@@ -192,7 +192,7 @@ export default async function DashboardPage() {
             { label: "Drafts Created", value: draftsCreated },
             { label: "Tasks Created", value: tasksCreated },
           ].map((item) => (
-            <Card>
+            <Card key={item.label}>
               <CardHeader className="stat-card-header">
                 <CardTitle className="stat-card-title">{item.label}</CardTitle>
               </CardHeader>
