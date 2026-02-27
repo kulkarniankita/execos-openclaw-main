@@ -1,12 +1,15 @@
 import { auth } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
-import { getUserByClerkId } from "@/db/queries";
+import { NextRequest, NextResponse } from "next/server";
+import { getUserByClerkId, getUsersWithAgentEnabled } from "@/db/queries";
 import { runAgent } from "@/lib/agent";
 
-export async function POST() {
-  const isCron = process.env.CRON_SECRET;
+export async function POST(request: NextRequest) {
+  const cronSecret = request.headers.get("authorization");
+  const isCron =
+    process.env.CRON_SECRET &&
+    cronSecret === `Bearer ${process.env.CRON_SECRET}`;
   //2 jobs
-  //1 manual run job
+
   //2. auto run job - cron
   if (!isCron) {
     //auth
@@ -33,7 +36,15 @@ export async function POST() {
   }
 
   //cron job
-  //get the clerk user by id
-  //runAgent
-  return NextResponse.json({ message: "Cron job Agent run successful" });
+  const results = [];
+  const eligibleUsers = await getUsersWithAgentEnabled();
+  for (const user of eligibleUsers) {
+    const result = await runAgent(user.id);
+    results.push({
+      userId: user.id,
+      status: result.status,
+      summary: result.summary,
+    });
+  }
+  return NextResponse.json({ results, processedCount: results.length });
 }

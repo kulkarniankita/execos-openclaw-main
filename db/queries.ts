@@ -168,3 +168,11 @@ export async function getAgentRuns(userId: string) {
     .limit(20);
   return results ?? [];
 }
+
+export async function getUsersWithAgentEnabled() {
+  const results = await db
+    .select()
+    .from(users)
+    .where(eq(users.agentEnabled, true));
+  return results ?? [];
+}
