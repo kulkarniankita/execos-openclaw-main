@@ -144,7 +144,7 @@
   }
 
   .sidebar-container {
-    @apply w-64 border-r border-border bg-sidebar;
+    @apply w-40 lg:w-64 border-r border-border bg-sidebar;
   }
 
   .layout-wrapper {
